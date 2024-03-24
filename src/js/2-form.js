@@ -23,19 +23,27 @@ function enteredText(event) {
 
     const formData = { email: email.trim(), message: message.trim() };
 
-localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    
 }
 
 function handleSubmit(event) {
     event.preventDefault();
-    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    const email = savedData.email;
-    const message = savedData.message;
+    const email = form.elements.email.value.trim();
+    const message = form.elements.message.value.trim();
     if (email === "" || message === "") {
         alert("All form fields must be filled in");
         return;
     }
-    console.log({ email: email, message: message});
-    event.currentTarget.reset();
-    localStorage.removeItem(STORAGE_KEY);
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (savedData && savedData.email && savedData.message) {
+        const savedEmail = savedData.email;
+        const savedMessage = savedData.message;
+
+        console.log({ email: savedEmail, message: savedMessage });
+        event.currentTarget.reset();
+        localStorage.removeItem(STORAGE_KEY);
+    } else {
+        alert("No saved data found")
+    }
 }
